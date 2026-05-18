@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sua palestra está pronta | Liderança que Transforma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Lora:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --yellow:      #F5B800;
+            --yellow-dark: #D9A300;
+            --yellow-faint:#FFF8E1;
+            --ink:         #0D0D0D;
+            --ink-mid:     #4A4A4A;
+            --ink-light:   #9A9A9A;
+            --paper:       #F6F5F0;
+            --white:       #FFFFFF;
+            --border:      #E0DFD8;
+        }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            position: relative;
+            z-index: 1;
+            padding: 20px 64px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(246,245,240,0.85);
+            backdrop-filter: blur(8px);
+        }
+
+        .header img {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
+
+        /* ─── PAGE ─── */
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 64px 32px 80px;
+            animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        /* ─── CONFIRM STRIP ─── */
+        .confirm-strip {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 36px;
+            animation: fadeUp 0.6s 0.05s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .confirm-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .confirm-text {
+            font-size: 13px;
+            color: var(--ink-mid);
+            line-height: 1.5;
+        }
+
+        .confirm-text strong {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 2px;
+        }
+
+        /* ─── HEADLINE ─── */
+        .headline {
+            margin-bottom: 40px;
+            animation: fadeUp 0.6s 0.1s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .headline-eyebrow {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-bottom: 10px;
+        }
+
+        .headline-primary {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: clamp(40px, 5vw, 64px);
+            line-height: 0.95;
+            text-transform: uppercase;
+            letter-spacing: -1.5px;
+            color: var(--ink);
+        }
+
+        .headline-accent {
+            background: linear-gradient(90deg, var(--yellow), var(--yellow-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .headline-sub {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: clamp(16px, 2vw, 21px);
+            color: var(--ink-mid);
+            margin-top: 12px;
+            line-height: 1.5;
+        }
+
+        /* ─── VIDEO ─── */
+        .video-wrap {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 */
+            background: var(--ink);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12), 0 32px 64px rgba(0,0,0,0.14);
+            margin-bottom: 40px;
+            animation: fadeUp 0.7s 0.16s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .video-wrap iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ─── MBA CARD ─── */
+        .mba-card {
+            background: var(--white);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            padding: 32px 36px;
+            display: flex;
+            gap: 28px;
+            align-items: flex-start;
+            animation: fadeUp 0.6s 0.22s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .mba-card-bar {
+            width: 4px;
+            min-height: 100%;
+            background: var(--yellow);
+            border-radius: 4px;
+            flex-shrink: 0;
+            align-self: stretch;
+        }
+
+        .mba-card-content {}
+
+        .mba-card-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-bottom: 8px;
+        }
+
+        .mba-card-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .mba-card-desc {
+            font-size: 14px;
+            color: var(--ink-mid);
+            line-height: 1.65;
+            margin-bottom: 20px;
+        }
+
+        .mba-card-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--yellow);
+            color: var(--ink);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: background 0.2s, gap 0.2s;
+        }
+
+        .mba-card-cta:hover { background: var(--yellow-dark); gap: 12px; }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 640px) {
+            .header { padding: 16px 20px; }
+            .header img { height: 32px; }
+            .page { padding: 40px 20px 64px; }
+            .mba-card { flex-direction: column; gap: 16px; padding: 24px 20px; }
+            .mba-card-bar { width: 100%; height: 4px; min-height: unset; align-self: auto; }
+            .headline-primary { font-size: 38px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <img src="Logo Fundace-USP-FEARP-PRETO.png" alt="Fundace USP FEARP">
+</header>
+
+<div class="page">
+
+    <div class="headline">
+        <p class="headline-eyebrow">Palestra gratuita</p>
+        <h1 class="headline-primary">Liderança que <span class="headline-accent">transforma:</span></h1>
+        <p class="headline-sub">decisões conscientes para um futuro sustentável</p>
+    </div>
+
+    <!-- Vídeo -->
+    <div class="video-wrap">
+        <iframe
+            src="https://www.youtube.com/embed/bQpw64a13tQ?rel=0&modestbranding=1&color=white"
+            title="Palestra — Liderança que Transforma"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </div>
+
+    <!-- Card MBA -->
+    <div class="mba-card">
+        <div class="mba-card-bar"></div>
+        <div class="mba-card-content">
+            <p class="mba-card-label">Quer ir além?</p>
+            <p class="mba-card-title">MBA Gestão Estratégica de Pessoas<br>e Org. Sustentáveis — FEARP/USP</p>
+            <p class="mba-card-desc">
+                Esta palestra é uma amostra do programa. Forme-se com quem está na vanguarda da gestão estratégica de pessoas, liderança consciente e sustentabilidade organizacional.
+            </p>
+            <a href="https://www.fundace.org.br/lp/mba-usp-gestao-estrategica-de-pessoas-e-org-sustentaveis" target="_blank" class="mba-card-cta">
+                Conhecer o MBA
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24">
+                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

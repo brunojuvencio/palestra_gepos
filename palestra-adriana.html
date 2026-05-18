@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palestra Gratuita | Liderança que Transforma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Lora:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --yellow:      #F5B800;
+            --yellow-dark: #D9A300;
+            --yellow-faint:#FFF8E1;
+            --ink:         #0D0D0D;
+            --ink-mid:     #4A4A4A;
+            --ink-light:   #9A9A9A;
+            --paper:       #F6F5F0;
+            --white:       #FFFFFF;
+            --border:      #E0DFD8;
+            --radius-card: 20px;
+            --radius-field:10px;
+            --shadow-card: 0 4px 6px rgba(0,0,0,0.04), 0 12px 40px rgba(0,0,0,0.10), 0 32px 64px rgba(0,0,0,0.06);
+        }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Subtle dot grid on the paper background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1;   transform: scale(1); }
+            50%       { opacity: 0.3; transform: scale(0.65); }
+        }
+        @keyframes shimmer {
+            from { background-position: -200% center; }
+            to   { background-position:  200% center; }
+        }
+
+        /* ─── LAYOUT ─── */
+        .layout {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* ─── LEFT PANEL ─── */
+        .left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 72px 52px 72px 64px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--yellow);
+            color: var(--ink);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            padding: 7px 16px;
+            border-radius: 100px;
+            align-self: flex-start;
+            margin-bottom: 32px;
+            animation: fadeUp 0.6s 0.05s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--ink);
+            border-radius: 50%;
+            animation: pulse 2.2s 1s infinite;
+        }
+
+        /* Headline */
+        .headline {
+            margin-bottom: 28px;
+            animation: fadeUp 0.6s 0.12s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .headline-primary {
+            display: block;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: clamp(44px, 4.2vw, 68px);
+            line-height: 0.93;
+            text-transform: uppercase;
+            letter-spacing: -1.5px;
+            color: var(--ink);
+        }
+
+        .headline-accent {
+            display: inline;
+            background: linear-gradient(90deg, var(--yellow), var(--yellow-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .headline-secondary {
+            display: block;
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: clamp(18px, 1.8vw, 26px);
+            line-height: 1.4;
+            color: var(--ink-mid);
+            margin-top: 14px;
+        }
+
+        /* Divider */
+        .divider {
+            width: 48px;
+            height: 3px;
+            background: var(--yellow);
+            border-radius: 2px;
+            margin: 0 0 18px;
+            animation: fadeUp 0.6s 0.2s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        /* Learn list */
+        .learn-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 36px;
+            animation: fadeUp 0.6s 0.26s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .learn-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 15px;
+            line-height: 1.55;
+            color: var(--ink-mid);
+        }
+
+        .learn-list li::before {
+            content: '';
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: var(--yellow);
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 1px;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+
+        /* MBA hook */
+        .mba-hook {
+            padding: 16px 20px;
+            background: var(--white);
+            border-radius: 12px;
+            border-left: 4px solid var(--yellow);
+            font-size: 13.5px;
+            color: var(--ink-mid);
+            line-height: 1.6;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            animation: fadeUp 0.6s 0.32s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .mba-hook strong { color: var(--ink); font-weight: 600; }
+
+        /* ─── RIGHT PANEL ─── */
+        .right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 64px 56px 64px 24px;
+            animation: fadeUp 0.7s 0.18s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        /* ─── FORM CARD ─── */
+        .form-wrap {
+            width: 100%;
+            max-width: 460px;
+            background: var(--white);
+            border-radius: var(--radius-card);
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: var(--shadow-card);
+            padding: 40px 36px 32px;
+        }
+
+        .form-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .form-subtitle {
+            font-size: 13px;
+            color: var(--ink-light);
+            margin-bottom: 24px;
+        }
+
+        /* ─── FORM FIELDS ─── */
+        .capture-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .capture-form input,
+        .capture-form select {
+            width: 100%;
+            padding: 13px 16px;
+            background: var(--paper);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-field);
+            font-family: 'Barlow', sans-serif;
+            font-size: 14px;
+            color: var(--ink);
+            outline: none;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .capture-form select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239A9A9A' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-color: var(--paper);
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 38px;
+            cursor: pointer;
+        }
+
+        .capture-form input:focus,
+        .capture-form select:focus {
+            border-color: var(--yellow);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(245,184,0,0.14);
+        }
+
+        .capture-form input::placeholder { color: #C0BFB8; }
+
+        /* Field label */
+        .field-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--ink-mid);
+            margin-bottom: 6px;
+            margin-top: 6px;
+            display: block;
+        }
+
+        .field-label span { color: var(--yellow); }
+
+        /* ─── RADIO GROUP ─── */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 14px;
+            background: var(--paper);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-field);
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+            font-size: 14px;
+            color: var(--ink-mid);
+            user-select: none;
+        }
+
+        .radio-option:hover {
+            border-color: var(--yellow);
+            background: var(--yellow-faint);
+        }
+
+        .radio-option input[type="radio"] { display: none; }
+
+        .radio-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.15s;
+        }
+
+        .radio-dot::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--yellow);
+            opacity: 0;
+            transform: scale(0);
+            transition: opacity 0.15s, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+        }
+
+        .radio-option input[type="radio"]:checked ~ .radio-dot { border-color: var(--yellow-dark); }
+        .radio-option input[type="radio"]:checked ~ .radio-dot::after { opacity: 1; transform: scale(1); }
+
+        .radio-option:has(input:checked) {
+            border-color: var(--yellow);
+            background: var(--yellow-faint);
+            color: var(--ink);
+            box-shadow: 0 0 0 3px rgba(245,184,0,0.12);
+        }
+
+        /* ─── CTA BUTTON ─── */
+        .cta-btn {
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--ink);
+            color: var(--yellow);
+            border: none;
+            border-radius: var(--radius-field);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 17px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.15s, gap 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, var(--yellow) 0%, var(--yellow-dark) 100%);
+            transform: translateX(-101%);
+            transition: transform 0.38s cubic-bezier(0.22,1,0.36,1);
+            z-index: 0;
+        }
+
+        .cta-btn:hover::before { transform: translateX(0); }
+        .cta-btn:hover { color: var(--ink); gap: 14px; box-shadow: 0 6px 28px rgba(245,184,0,0.3); }
+        .cta-btn span, .cta-btn svg { position: relative; z-index: 1; }
+        .cta-btn:active { transform: scale(0.98); }
+
+        /* Terms */
+        .terms {
+            font-size: 11px;
+            color: var(--ink-light);
+            line-height: 1.6;
+            margin-top: 6px;
+        }
+
+        /* Footer */
+        .form-footer {
+            font-size: 12px;
+            color: var(--ink-light);
+            text-align: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .form-footer a {
+            color: var(--ink-mid);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-footer a:hover { text-decoration: underline; }
+
+        /* ─── SUCCESS STATE ─── */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(246,245,240,0.96);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-overlay.active { display: flex; }
+
+        .success-card {
+            text-align: center;
+            max-width: 460px;
+            padding: 56px 40px;
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .success-icon {
+            width: 68px;
+            height: 68px;
+            background: var(--yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .success-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 52px;
+            text-transform: uppercase;
+            line-height: 0.95;
+            margin-bottom: 16px;
+        }
+
+        .success-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--ink-mid);
+            margin-bottom: 28px;
+        }
+
+        .success-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--yellow);
+            color: var(--ink);
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 17px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: background 0.2s, gap 0.2s;
+        }
+
+        .success-cta:hover { background: var(--yellow-dark); gap: 14px; }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 960px) {
+            .layout {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .left {
+                padding: 56px 32px 40px;
+            }
+
+            .right {
+                padding: 8px 32px 56px;
+                justify-content: stretch;
+            }
+
+            .form-wrap { max-width: 100%; }
+        }
+
+        @media (max-width: 540px) {
+            .left  { padding: 36px 20px 28px; }
+            .right { padding: 8px 20px 48px; }
+            .form-wrap { padding: 24px 18px 20px; }
+            .form-row { grid-template-columns: 1fr; }
+
+            /* Headline ganha destaque */
+            .headline-primary   { font-size: 58px; letter-spacing: -2px; }
+            .headline-secondary { font-size: 22px; margin-top: 10px; }
+
+            /* Resto fica mais compacto */
+            .badge       { font-size: 10px; padding: 5px 12px; margin-bottom: 20px; }
+            .learn-list  { gap: 8px; margin-bottom: 24px; }
+            .learn-list li { font-size: 13px; }
+            .mba-hook    { font-size: 12px; padding: 12px 14px; }
+            .divider     { margin-bottom: 14px; }
+        }
+
+        @media (min-width: 1280px) {
+            .left  { padding: 80px 60px 80px 80px; }
+            .right { padding: 72px 80px 72px 28px; }
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            position: relative;
+            z-index: 1;
+            padding: 20px 64px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(246,245,240,0.85);
+            backdrop-filter: blur(8px);
+        }
+
+        .header img {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
+
+        @media (max-width: 540px) {
+            .header { padding: 16px 20px; }
+            .header img { height: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <img src="Logo Fundace-USP-FEARP-PRETO.png" alt="Fundace USP FEARP">
+</header>
+
+<div class="layout">
+
+    <!-- ── COLUNA ESQUERDA ── -->
+    <div class="left">
+
+        <div class="badge">
+            <span class="badge-dot"></span>
+            Palestra Gratuita
+        </div>
+
+        <h1 class="headline">
+            <span class="headline-primary">Liderança que<br><span class="headline-accent">transforma:</span></span>
+            <span class="headline-secondary">decisões conscientes para<br>um futuro sustentável</span>
+        </h1>
+
+        <div class="divider"></div>
+
+        <ul class="learn-list">
+            <li>Como tomar decisões que transformam equipes e culturas organizacionais</li>
+            <li>O papel da liderança consciente na gestão sustentável de pessoas</li>
+            <li>Ferramentas práticas para liderar com propósito e responsabilidade</li>
+        </ul>
+
+        <div class="mba-hook">
+            Este conteúdo é uma amostra do <strong>MBA Gestão Estratégica de Pessoas e Org. Sustentáveis da FEARP/USP</strong> — formação para líderes que querem transformar organizações de dentro para fora.
+        </div>
+
+    </div>
+
+    <!-- ── COLUNA DIREITA (formulário) ── -->
+    <div class="right">
+        <div class="form-wrap">
+
+            <p class="form-title">Garanta seu acesso</p>
+            <p class="form-subtitle">100% gratuito · Acesso imediato após cadastro</p>
+
+            <form class="capture-form" id="captureForm" novalidate>
+
+                <div class="form-row">
+                    <input type="text" name="name" placeholder="Seu nome" autocomplete="given-name" required>
+                    <input type="text" name="empresa" placeholder="Sua empresa" autocomplete="organization">
+                </div>
+
+                <input type="email" name="email" placeholder="Seu melhor e-mail" autocomplete="email" required>
+
+                <label class="field-label" for="graduacao">Possui graduação? <span>*</span></label>
+                <select id="graduacao" name="graduacao" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option value="sim_completo">Sim, concluída</option>
+                    <option value="em_andamento">Sim, em andamento</option>
+                    <option value="nao">Não</option>
+                </select>
+
+                <label class="field-label">Pretende fazer uma pós-graduação ou MBA? <span>*</span></label>
+                <div class="radio-group" id="mbaGroup">
+                    <label class="radio-option">
+                        <input type="radio" name="mba" value="sim_agora" required>
+                        <span class="radio-dot"></span>
+                        Sim, imediatamente
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="mba" value="sim_depois">
+                        <span class="radio-dot"></span>
+                        Sim, mas não agora
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="mba" value="nao">
+                        <span class="radio-dot"></span>
+                        Não
+                    </label>
+                </div>
+
+                <p class="terms">
+                    Ao enviar, você concorda em receber comunicações sobre cursos e conteúdos da Fundace/USP. Cancele quando quiser.
+                </p>
+
+                <button type="submit" class="cta-btn">
+                    <span>Garantir meu acesso gratuito</span>
+                    <svg width="17" height="17" fill="none" viewBox="0 0 24 24">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+            </form>
+
+            <p class="form-footer">
+                Dúvidas? <a href="mailto:comunicacao@fundace.org.br">comunicacao@fundace.org.br</a>
+            </p>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- ── SUCCESS STATE ── -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-card">
+        <div class="success-icon">
+            <svg width="30" height="30" fill="none" viewBox="0 0 24 24">
+                <path d="M5 13l4 4L19 7" stroke="#0D0D0D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <h2 class="success-title" id="successTitle">Sua palestra<br>está pronta</h2>
+        <p class="success-text" id="successText">
+            Enviamos o link para o seu e-mail.<br>
+            Ou clique abaixo para assistir agora.
+        </p>
+        <a href="obrigado.html" class="success-cta">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            Assistir palestra
+        </a>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('captureForm');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const name      = form.querySelector('[name="name"]').value.trim();
+        const email     = form.querySelector('[name="email"]').value.trim();
+        const graduacao = form.querySelector('[name="graduacao"]').value;
+        const mba       = form.querySelector('[name="mba"]:checked');
+
+        if (!name)    { form.querySelector('[name="name"]').focus(); return; }
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            form.querySelector('[name="email"]').focus(); return;
+        }
+        if (!graduacao) { form.querySelector('[name="graduacao"]').focus(); return; }
+        if (!mba)       { form.querySelector('.radio-group').scrollIntoView({ behavior: 'smooth' }); return; }
+
+        // TODO: Integrar com CRM
+        // fetch('/api/lead', { method: 'POST', body: JSON.stringify({ name, email, graduacao, mba: mba.value }) })
+
+        const first = name.split(' ')[0];
+        document.getElementById('successTitle').innerHTML = `Tudo certo,<br>${first}!`;
+        document.getElementById('successText').innerHTML  =
+            `O link da palestra foi para <strong>${email}</strong>.<br>Ou clique abaixo para assistir agora.`;
+
+        document.getElementById('successOverlay').classList.add('active');
+        setTimeout(() => { window.location.href = 'obrigado.html'; }, 2200);
+    });
+</script>
+
+</body>
+</html>
