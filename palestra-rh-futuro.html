@@ -1102,6 +1102,25 @@
         #audience .section-title { color: var(--white); }
         #audience .section-subtitle { color: rgba(255,255,255,0.5); }
 
+        .audience-requisito {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: rgba(245,184,0,0.12);
+            border: 1px solid rgba(245,184,0,0.35);
+            border-radius: 100px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--yellow);
+        }
+
+        .audience-requisito svg { flex-shrink: 0; color: var(--yellow); }
+
         .audience-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -2042,6 +2061,10 @@
             <div class="section-label reveal" style="justify-content:center;">Para quem é esta palestra</div>
             <h2 class="section-title reveal reveal-delay-1">Você é o<br><span style="color:var(--yellow)">profissional certo</span></h2>
             <p class="section-subtitle reveal reveal-delay-2">Se você se identifica com algum destes perfis, essa palestra foi feita para você</p>
+            <div class="audience-requisito reveal reveal-delay-3">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                Para participar do evento é requisito ter graduação completa
+            </div>
         </div>
 
         <div class="audience-grid">
