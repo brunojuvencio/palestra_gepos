@@ -2354,6 +2354,12 @@
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
+        const _utmParams = Object.fromEntries(
+            ['utm_source','utm_medium','utm_campaign','utm_term','utm_content']
+                .map(k => [k, new URLSearchParams(window.location.search).get(k) || undefined])
+                .filter(([,v]) => v)
+        );
+
         const name      = form.querySelector('[name="name"]').value.trim();
         const email     = form.querySelector('[name="email"]').value.trim();
         const graduacao = form.querySelector('[name="graduacao"]').value;
@@ -2389,6 +2395,7 @@
                     cidade:  form.querySelector('[name="cidade"]').value.trim(),
                     graduacao,
                     mba: mba.value,
+                    ..._utmParams,
                 }),
             });
 

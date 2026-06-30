@@ -81,7 +81,7 @@ async function acAddTag(contactId, tagId) {
 // Supabase helpers
 // ---------------------------------------------------------------------------
 
-async function sbInsertLead({ nome, email, telefone, empresa, cargo, cidade, graduacao, mba }) {
+async function sbInsertLead({ nome, email, telefone, empresa, cargo, cidade, graduacao, mba, utm_source, utm_medium, utm_campaign, utm_term, utm_content }) {
   const res = await fetch(`${SB_URL}/rest/v1/${encodeURIComponent(SB_TABLE)}`, {
     method: 'POST',
     headers: {
@@ -90,7 +90,7 @@ async function sbInsertLead({ nome, email, telefone, empresa, cargo, cidade, gra
       'Content-Type':  'application/json',
       Prefer:          'return=minimal',
     },
-    body: JSON.stringify({ nome, email, telefone, empresa, cargo, cidade, graduacao, mba }),
+    body: JSON.stringify({ nome, email, telefone, empresa, cargo, cidade, graduacao, mba, utm_source, utm_medium, utm_campaign, utm_term, utm_content }),
   });
   if (!res.ok) throw new Error(`Supabase insert → ${res.status}: ${await res.text()}`);
 }
@@ -184,7 +184,8 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST')    return res.status(405).json({ error: 'Method not allowed' });
 
-  const { name, email, telefone, empresa, cargo, cidade, graduacao, mba } = req.body || {};
+  const { name, email, telefone, empresa, cargo, cidade, graduacao, mba,
+          utm_source, utm_medium, utm_campaign, utm_term, utm_content } = req.body || {};
 
   if (!name || !email) {
     return res.status(400).json({ error: 'name e email são obrigatórios' });
@@ -195,7 +196,8 @@ export default async function handler(req, res) {
 
   // Supabase — todos os leads (não bloqueia o fluxo se falhar)
   try {
-    await sbInsertLead({ nome: name.trim(), email, telefone, empresa, cargo, cidade, graduacao, mba });
+    await sbInsertLead({ nome: name.trim(), email, telefone, empresa, cargo, cidade, graduacao, mba,
+                         utm_source, utm_medium, utm_campaign, utm_term, utm_content });
   } catch (err) {
     console.error('[lead] Supabase error:', err.message);
   }
