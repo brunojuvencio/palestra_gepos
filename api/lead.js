@@ -11,6 +11,11 @@ const PL_PIPELINE = process.env.PLOOMES_PIPELINE_ID;
 const PL_BASE     = 'https://api2.ploomes.com';
 const PL_TITLE    = 'Palestra RH do Futuro - GEPOS';
 
+/* ── Supabase ── */
+const SB_URL = process.env.SUPABASE_URL;
+const SB_KEY = process.env.SUPABASE_SERVICE_KEY;
+const SB_TABLE = 'GEPOS  - RH do Futuro';
+
 // ---------------------------------------------------------------------------
 // ActiveCampaign helpers
 // ---------------------------------------------------------------------------
@@ -70,6 +75,24 @@ async function acAddTag(contactId, tagId) {
     method: 'POST',
     body: JSON.stringify({ contactTag: { contact: contactId, tag: tagId } }),
   });
+}
+
+// ---------------------------------------------------------------------------
+// Supabase helpers
+// ---------------------------------------------------------------------------
+
+async function sbInsertLead({ nome, email, telefone, empresa, cargo, cidade, graduacao, mba }) {
+  const res = await fetch(`${SB_URL}/rest/v1/${encodeURIComponent(SB_TABLE)}`, {
+    method: 'POST',
+    headers: {
+      apikey:          SB_KEY,
+      Authorization:   `Bearer ${SB_KEY}`,
+      'Content-Type':  'application/json',
+      Prefer:          'return=minimal',
+    },
+    body: JSON.stringify({ nome, email, telefone, empresa, cargo, cidade, graduacao, mba }),
+  });
+  if (!res.ok) throw new Error(`Supabase insert → ${res.status}: ${await res.text()}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -170,6 +193,13 @@ export default async function handler(req, res) {
   const [firstName, ...rest] = name.trim().split(' ');
   const lastName = rest.join(' ');
 
+  // Supabase — todos os leads (não bloqueia o fluxo se falhar)
+  try {
+    await sbInsertLead({ nome: name.trim(), email, telefone, empresa, cargo, cidade, graduacao, mba });
+  } catch (err) {
+    console.error('[lead] Supabase error:', err.message);
+  }
+
   // ActiveCampaign — todos os leads
   try {
     const contactId = await acSyncContact({ email, firstName, lastName, phone: telefone, empresa, cargo });
@@ -181,8 +211,8 @@ export default async function handler(req, res) {
   }
 
   // Ploomes — só se tem graduação E quer fazer MBA imediatamente
-  const temGraduacao  = graduacao === 'sim_completo' || graduacao === 'em_andamento';
-  const querMbaAgora  = mba === 'sim_agora';
+  const temGraduacao = graduacao === 'sim_completo' || graduacao === 'em_andamento';
+  const querMbaAgora = mba === 'sim_agora';
 
   if (temGraduacao && querMbaAgora) {
     try {
