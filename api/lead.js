@@ -108,23 +108,45 @@ async function plCreateContact({ name, email, phone, empresa, cidade }) {
   return data.value?.[0]?.Id;
 }
 
+const MBA_LABEL = {
+  sim_agora:  'Sim, imediatamente',
+  sim_depois: 'Sim, mas não agora',
+  nao:        'Não',
+};
+
 async function plCreateDeal(contactId) {
-  await plFetch('/Deals', {
+  const data = await plFetch('/Deals', {
     method: 'POST',
     body: JSON.stringify({
-      Title:      PL_TITLE,
-      PipelineId: Number(PL_PIPELINE),
+      Title:         PL_TITLE,
+      PipelineId:    Number(PL_PIPELINE),
       ContactsDeals: [{ ContactId: contactId }],
+    }),
+  });
+  return data.value?.[0]?.Id || null;
+}
+
+async function plAddNote(dealId, text) {
+  await plFetch('/Notes', {
+    method: 'POST',
+    body: JSON.stringify({
+      Content: text,
+      DealId:  dealId,
     }),
   });
 }
 
-async function syncPloomes({ name, email, phone, empresa, cidade }) {
+async function syncPloomes({ name, email, phone, empresa, cidade, mba }) {
   let contactId = await plFindContact(email);
   if (!contactId) {
     contactId = await plCreateContact({ name, email, phone, empresa, cidade });
   }
-  await plCreateDeal(contactId);
+  const dealId = await plCreateDeal(contactId);
+
+  if (dealId && mba) {
+    const mbaLabel = MBA_LABEL[mba] || mba;
+    await plAddNote(dealId, `Pretende fazer MBA/Pós-graduação: ${mbaLabel}`);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -164,7 +186,7 @@ export default async function handler(req, res) {
 
   if (temGraduacao && querMbaAgora) {
     try {
-      await syncPloomes({ name: name.trim(), email, phone: telefone, empresa, cidade });
+      await syncPloomes({ name: name.trim(), email, phone: telefone, empresa, cidade, mba });
     } catch (err) {
       // Não bloqueia o fluxo — o lead já foi salvo no ActiveCampaign
       console.error('[lead] Ploomes error:', err.message);
