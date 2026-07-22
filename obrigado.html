@@ -295,10 +295,10 @@
     (function () {
         const params = new URLSearchParams(window.location.search);
         window._trackMeta = {
-            utm_source:   params.get('utm_source')   || undefined,
-            utm_medium:   params.get('utm_medium')   || undefined,
-            utm_campaign: params.get('utm_campaign') || undefined,
-            lead_id:      params.get('lead_id')      || params.get('email') || undefined,
+            utm_source:   params.get('utm_source')   || null,
+            utm_medium:   params.get('utm_medium')   || null,
+            utm_campaign: params.get('utm_campaign') || null,
+            lead_email:   params.get('email')        || null,
         };
     })();
 
@@ -315,8 +315,8 @@
             video_id:        VIDEO_ID,
             page:            window.location.pathname,
         };
-        // Mescla apenas as chaves com valor
-        Object.entries(window._trackMeta).forEach(([k, v]) => { if (v) payload[k] = v; });
+        // Mescla todos os metadados (incluindo nulls para garantir coluna preenchida)
+        Object.assign(payload, window._trackMeta);
 
         console.log('[VideoTracking]', payload);
 
