@@ -268,24 +268,37 @@
         };
     })();
 
+    // ── Supabase config ────────────────────────────────────────────────────
+    const SB_URL   = 'https://hasptpxcyavfdzxtwpws.supabase.co';
+    const SB_ANON  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhhc3B0cHhjeWF2ZmR6eHR3cHdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMDA2MTYsImV4cCI6MjA5MTY3NjYxNn0.5TTFlqGtVl9AqWDzPTylquWRB1QdP1YXxPQRGfu5B68';
+    const SB_TABLE = 'Base GEPOS';
+
     // ── Dispatcher de eventos ──────────────────────────────────────────────
     function trackVideoEvent(eventName, percentWatched) {
         const payload = {
             event:           eventName,
             percent_watched: percentWatched,
-            timestamp:       new Date().toISOString(),
+            video_id:        VIDEO_ID,
+            page:            window.location.pathname,
         };
         // Mescla apenas as chaves com valor
         Object.entries(window._trackMeta).forEach(([k, v]) => { if (v) payload[k] = v; });
 
         console.log('[VideoTracking]', payload);
 
-        // TODO: substituir console.log pelo envio ao webhook quando estiver pronto:
-        // fetch(WEBHOOK_URL, {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify(payload),
-        // });
+        // TODO: para enviar também a um webhook externo, adicione um fetch aqui:
+        // fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+
+        fetch(SB_URL + '/rest/v1/' + encodeURIComponent(SB_TABLE), {
+            method:  'POST',
+            headers: {
+                apikey:          SB_ANON,
+                Authorization:   'Bearer ' + SB_ANON,
+                'Content-Type':  'application/json',
+                Prefer:          'return=minimal',
+            },
+            body: JSON.stringify(payload),
+        }).catch(function (err) { console.warn('[VideoTracking] Supabase error:', err); });
     }
 
     // ── Player YouTube IFrame API ──────────────────────────────────────────
