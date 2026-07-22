@@ -161,7 +161,8 @@
             animation: fadeUp 0.7s 0.16s cubic-bezier(0.22,1,0.36,1) both;
         }
 
-        .video-wrap iframe {
+        .video-wrap iframe,
+        #yt-player {
             position: absolute;
             inset: 0;
             width: 100%;
@@ -265,12 +266,7 @@
 
     <!-- Vídeo -->
     <div class="video-wrap">
-        <iframe
-            src="https://www.youtube.com/embed/bQpw64a13tQ?rel=0&modestbranding=1&color=white"
-            title="Palestra — Liderança que Transforma"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen>
-        </iframe>
+        <div id="yt-player"></div>
     </div>
 
     <!-- Card MBA -->
@@ -293,5 +289,110 @@
 
 </div>
 
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+    // ── UTMs e identificadores da URL ──────────────────────────────────────
+    (function () {
+        const params = new URLSearchParams(window.location.search);
+        window._trackMeta = {
+            utm_source:   params.get('utm_source')   || undefined,
+            utm_medium:   params.get('utm_medium')   || undefined,
+            utm_campaign: params.get('utm_campaign') || undefined,
+            lead_id:      params.get('lead_id')      || params.get('email') || undefined,
+        };
+    })();
+
+    // ── Dispatcher de eventos ──────────────────────────────────────────────
+    function trackVideoEvent(eventName, percentWatched) {
+        const payload = {
+            event:           eventName,
+            percent_watched: percentWatched,
+            timestamp:       new Date().toISOString(),
+        };
+        // Mescla apenas as chaves com valor
+        Object.entries(window._trackMeta).forEach(([k, v]) => { if (v) payload[k] = v; });
+
+        console.log('[VideoTracking]', payload);
+
+        // TODO: substituir console.log pelo envio ao webhook quando estiver pronto:
+        // fetch(WEBHOOK_URL, {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify(payload),
+        // });
+    }
+
+    // ── Player YouTube IFrame API ──────────────────────────────────────────
+    const VIDEO_ID = 'bQpw64a13tQ';
+    const MILESTONES = [25, 50, 75];
+
+    let player, pollInterval;
+    let started  = false;
+    const fired  = new Set();   // evita disparar o mesmo marco mais de uma vez
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('yt-player', {
+            videoId:     VIDEO_ID,
+            playerVars:  { rel: 0, modestbranding: 1, color: 'white' },
+            events: {
+                onStateChange: onPlayerStateChange,
+            },
+        });
+    }
+
+    function getPct() {
+        if (!player || typeof player.getDuration !== 'function') return 0;
+        const dur = player.getDuration();
+        return dur ? Math.round((player.getCurrentTime() / dur) * 100) : 0;
+    }
+
+    function startPolling() {
+        if (pollInterval) return;
+        pollInterval = setInterval(function () {
+            const pct = getPct();
+
+            MILESTONES.forEach(function (m) {
+                const key = 'video_progress_' + m;
+                if (pct >= m && !fired.has(key)) {
+                    fired.add(key);
+                    trackVideoEvent(key, pct);
+                }
+            });
+
+            if (pct >= 95 && !fired.has('video_complete')) {
+                fired.add('video_complete');
+                trackVideoEvent('video_complete', pct);
+                stopPolling();
+            }
+        }, 1000);
+    }
+
+    function stopPolling() {
+        clearInterval(pollInterval);
+        pollInterval = null;
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+            if (!started) {
+                started = true;
+                trackVideoEvent('video_start', 0);
+            }
+            startPolling();
+        } else if (event.data === YT.PlayerState.PAUSED) {
+            stopPolling();
+            const pct = getPct();
+            if (!fired.has('video_complete')) {
+                trackVideoEvent('video_paused', pct);
+            }
+        } else if (event.data === YT.PlayerState.ENDED) {
+            stopPolling();
+            if (!fired.has('video_complete')) {
+                fired.add('video_complete');
+                trackVideoEvent('video_complete', 100);
+            }
+        }
+    }
+</script>
 </body>
 </html>
