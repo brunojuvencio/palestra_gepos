@@ -426,6 +426,11 @@
             }
         }
     }
+
+    // ── Rastreamento do clique no botão WhatsApp ───────────────────────────
+    document.querySelector('.c-cta').addEventListener('click', function () {
+        trackVideoEvent('whatsapp_click', getPct());
+    });
 </script>
 </body>
 </html>
