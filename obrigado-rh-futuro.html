@@ -63,38 +63,48 @@
         }
 
         /* ─── PAGE ─── */
+        /* Vídeo domina: page vai até 1100px */
         .page {
             position: relative;
             z-index: 1;
-            max-width: 860px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 64px 32px 80px;
+            padding: 40px 24px 80px;
             animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        /* Headline e card ficam em 640px — subordinados ao vídeo */
+        .content-narrow {
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* ─── HEADLINE ─── */
         .headline {
-            margin-bottom: 40px;
+            margin-bottom: 20px;
+            text-align: center;
             animation: fadeUp 0.6s 0.1s cubic-bezier(0.22,1,0.36,1) both;
         }
 
         .headline-eyebrow {
             font-family: 'Barlow Condensed', sans-serif;
             font-weight: 800;
-            font-size: 12px;
+            font-size: 11px;
             letter-spacing: 2.5px;
             text-transform: uppercase;
             color: var(--ink-light);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
+        /* Headline menor — introdução, não rivaliza com o vídeo */
         .headline-primary {
             font-family: 'Barlow Condensed', sans-serif;
             font-weight: 900;
-            font-size: clamp(40px, 5vw, 64px);
-            line-height: 0.95;
+            font-size: clamp(28px, 3.5vw, 42px);
+            line-height: 1;
             text-transform: uppercase;
-            letter-spacing: -1.5px;
+            letter-spacing: -1px;
             color: var(--ink);
         }
 
@@ -108,13 +118,14 @@
         .headline-sub {
             font-family: 'Lora', serif;
             font-style: italic;
-            font-size: clamp(16px, 2vw, 21px);
+            font-size: clamp(13px, 1.5vw, 16px);
             color: var(--ink-mid);
-            margin-top: 12px;
+            margin-top: 8px;
             line-height: 1.5;
         }
 
         /* ─── VIDEO ─── */
+        /* Elemento dominante: mais respiro, sombra mais dramática */
         .video-wrap {
             position: relative;
             width: 100%;
@@ -122,8 +133,9 @@
             background: var(--ink);
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.12), 0 32px 64px rgba(0,0,0,0.14);
-            margin-bottom: 40px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.18), 0 48px 80px rgba(0,0,0,0.18);
+            margin-top: 8px;
+            margin-bottom: 48px;
             animation: fadeUp 0.7s 0.16s cubic-bezier(0.22,1,0.36,1) both;
         }
 
@@ -235,8 +247,8 @@
         @media (max-width: 640px) {
             .header { padding: 16px 20px; }
             .header img { height: 32px; }
-            .page { padding: 40px 20px 64px; }
-            .headline-primary { font-size: 38px; }
+            .page { padding: 28px 16px 64px; }
+            .video-wrap { margin-bottom: 32px; border-radius: 12px; }
             .consultant-card { padding: 24px 20px; }
             .c-phrase,
             .c-cta { padding-left: 0; margin-left: 0; }
@@ -251,18 +263,22 @@
 
 <div class="page">
 
-    <div class="headline">
-        <p class="headline-eyebrow">Palestra gratuita</p>
-        <h1 class="headline-primary">O RH do <span class="headline-accent">Futuro:</span></h1>
-        <p class="headline-sub">do papel operacional ao papel estratégico — Prof. Dr. Gilberto Shinyashiki</p>
+    <!-- Headline estreita — introdução breve -->
+    <div class="content-narrow">
+        <div class="headline">
+            <p class="headline-eyebrow">Palestra gratuita</p>
+            <h1 class="headline-primary">O RH do <span class="headline-accent">Futuro:</span></h1>
+            <p class="headline-sub">do papel operacional ao papel estratégico — Prof. Dr. Gilberto Shinyashiki</p>
+        </div>
     </div>
 
-    <!-- Vídeo -->
+    <!-- Vídeo — elemento dominante, largura total do page (1100px) -->
     <div class="video-wrap">
         <div id="yt-player"></div>
     </div>
 
-    <!-- Card Consultor -->
+    <!-- Card Consultor estreito — suporte, não compete com o vídeo -->
+    <div class="content-narrow">
     <div class="consultant-card">
         <div class="c-identity">
             <div class="c-avatar">
@@ -282,6 +298,7 @@
             </svg>
             Falar com o Jhonata
         </a>
+    </div>
     </div>
 
 </div>
