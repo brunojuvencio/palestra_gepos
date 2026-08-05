@@ -3,7 +3,8 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/obrigado", "destination": "/obrigado.html" },
-    { "source": "/obrigado-rh-futuro", "destination": "/obrigado-rh-futuro.html" }
+    { "source": "/obrigado-rh-futuro", "destination": "/obrigado-rh-futuro.html" },
+    { "source": "/obrigado-rh-futuro-b", "destination": "/obrigado-rh-futuro-b.html" }
   ],
   "headers": [
     {

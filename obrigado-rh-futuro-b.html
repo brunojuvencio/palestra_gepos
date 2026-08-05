@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sua palestra está pronta | O RH do Futuro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Lora:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --yellow:      #F5B800;
+            --yellow-dark: #D9A300;
+            --yellow-faint:#FFF8E1;
+            --ink:         #0D0D0D;
+            --ink-mid:     #4A4A4A;
+            --ink-light:   #9A9A9A;
+            --paper:       #F6F5F0;
+            --white:       #FFFFFF;
+            --border:      #E0DFD8;
+        }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─── GATE OVERLAY ─── */
+        .gate-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(13, 13, 13, 0.72);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            transition: opacity 0.4s ease;
+        }
+
+        .gate-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .gate-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px 36px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.12);
+            animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+            text-align: center;
+        }
+
+        .gate-logo {
+            height: 32px;
+            width: auto;
+            display: block;
+            margin: 0 auto 28px;
+        }
+
+        .gate-eyebrow {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-bottom: 10px;
+        }
+
+        .gate-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: clamp(26px, 5vw, 34px);
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .gate-title-accent {
+            background: linear-gradient(90deg, var(--yellow), var(--yellow-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gate-sub {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 14px;
+            color: var(--ink-mid);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        .gate-divider {
+            width: 40px;
+            height: 3px;
+            background: var(--yellow);
+            border-radius: 2px;
+            margin: 0 auto 24px;
+        }
+
+        .gate-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink-mid);
+            margin-bottom: 10px;
+            display: block;
+            text-align: left;
+        }
+
+        .gate-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 15px;
+            color: var(--ink);
+            background: var(--paper);
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 14px;
+        }
+
+        .gate-input:focus {
+            border-color: var(--yellow);
+            background: var(--white);
+        }
+
+        .gate-input.error {
+            border-color: #e53e3e;
+        }
+
+        .gate-error {
+            font-size: 12px;
+            color: #e53e3e;
+            margin-top: -10px;
+            margin-bottom: 12px;
+            text-align: left;
+            display: none;
+        }
+
+        .gate-error.visible { display: block; }
+
+        .gate-btn {
+            width: 100%;
+            padding: 15px 24px;
+            background: var(--yellow);
+            color: var(--ink);
+            border: none;
+            border-radius: 10px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.18s ease, transform 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .gate-btn:hover { background: var(--yellow-dark); }
+        .gate-btn:active { transform: scale(0.98); }
+
+        .gate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .gate-privacy {
+            font-size: 11px;
+            color: var(--ink-light);
+            margin-top: 14px;
+            line-height: 1.5;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            position: relative;
+            z-index: 1;
+            padding: 20px 64px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(246,245,240,0.85);
+            backdrop-filter: blur(8px);
+        }
+
+        .header img {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
+
+        /* ─── PAGE ─── */
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+            animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .content-narrow {
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ─── HEADLINE ─── */
+        .headline {
+            margin-bottom: 20px;
+            text-align: center;
+            animation: fadeUp 0.6s 0.1s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .headline-eyebrow {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-bottom: 8px;
+        }
+
+        .headline-primary {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: clamp(28px, 3.5vw, 42px);
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            color: var(--ink);
+        }
+
+        .headline-accent {
+            background: linear-gradient(90deg, var(--yellow), var(--yellow-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .headline-desc {
+            font-size: clamp(14px, 1.6vw, 16px);
+            color: var(--ink-mid);
+            line-height: 1.7;
+            margin-top: 16px;
+        }
+
+        .headline-sub {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: clamp(13px, 1.5vw, 16px);
+            color: var(--ink-mid);
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        /* ─── VIDEO ─── */
+        .video-wrap {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            background: var(--ink);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.18), 0 48px 80px rgba(0,0,0,0.18);
+            margin-top: 8px;
+            margin-bottom: 48px;
+            animation: fadeUp 0.7s 0.16s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .video-wrap iframe,
+        #yt-player {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ─── CONSULTANT CARD ─── */
+        .consultant-card {
+            background: var(--yellow-faint);
+            border-radius: 16px;
+            border: 1px solid rgba(245,184,0,0.28);
+            padding: 28px 32px;
+            animation: fadeUp 0.6s 0.22s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .c-identity {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .c-avatar {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            border: 3px solid var(--yellow);
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 5px rgba(245,184,0,0.15);
+        }
+
+        .c-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            display: block;
+        }
+
+        .c-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .c-name {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 26px;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            color: var(--ink);
+            line-height: 1;
+        }
+
+        .c-role {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: var(--ink-light);
+        }
+
+        .c-phrase {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 16px;
+            color: var(--ink-mid);
+            line-height: 1.65;
+            padding-left: 102px;
+            margin-bottom: 20px;
+        }
+
+        .c-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #25D366;
+            color: #fff;
+            padding: 15px 28px;
+            border-radius: 50px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            box-shadow: 0 4px 16px rgba(37,211,102,0.30);
+            transition: background 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .c-cta:hover {
+            background: #1dbe5c;
+            box-shadow: 0 6px 20px rgba(37,211,102,0.40);
+        }
+        .c-cta svg { flex-shrink: 0; }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 640px) {
+            .header { padding: 16px 20px; }
+            .header img { height: 32px; }
+            .page { padding: 28px 16px 64px; }
+            .video-wrap { margin-bottom: 32px; border-radius: 12px; }
+            .gate-card { padding: 32px 24px; }
+            .consultant-card { padding: 16px; }
+            .c-identity { gap: 12px; margin-bottom: 12px; }
+            .c-avatar { width: 56px; height: 56px; }
+            .c-name { font-size: 18px; }
+            .c-role { font-size: 10px; letter-spacing: 1px; }
+            .c-phrase { font-size: 13px; padding-left: 0; margin-bottom: 14px; }
+            .c-cta { font-size: 13px; padding: 11px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ─── GATE: popup de captura de e-mail ─── -->
+<div class="gate-overlay" id="gateOverlay">
+    <div class="gate-card">
+        <img src="Logo Fundace-USP-FEARP-PRETO.png" alt="Fundace USP FEARP" class="gate-logo">
+        <p class="gate-eyebrow">Palestra gratuita</p>
+        <h2 class="gate-title">O RH do <span class="gate-title-accent">Futuro</span></h2>
+        <p class="gate-sub">do papel operacional ao papel estratégico<br>Prof. Dr. Gilberto Shinyashiki</p>
+        <div class="gate-divider"></div>
+        <label class="gate-label" for="gateEmail">Informe seu e-mail para assistir</label>
+        <input
+            type="email"
+            id="gateEmail"
+            class="gate-input"
+            placeholder="seu@email.com"
+            autocomplete="email"
+            inputmode="email"
+        >
+        <p class="gate-error" id="gateError">Por favor, insira um e-mail válido.</p>
+        <button class="gate-btn" id="gateBtn" type="button">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Assistir à palestra
+        </button>
+        <p class="gate-privacy">Seus dados são protegidos e não serão compartilhados.</p>
+    </div>
+</div>
+
+<header class="header">
+    <img src="Logo Fundace-USP-FEARP-PRETO.png" alt="Fundace USP FEARP">
+</header>
+
+<div class="page">
+
+    <div class="content-narrow">
+        <div class="headline">
+            <p class="headline-eyebrow">Palestra gratuita</p>
+            <h1 class="headline-primary">O RH do <span class="headline-accent">Futuro:</span></h1>
+            <p class="headline-sub">do papel operacional ao papel estratégico — Prof. Dr. Gilberto Shinyashiki</p>
+            <p class="headline-desc">Essa palestra faz parte do conteúdo preparatório do MBA USP em Gestão Estratégica de Pessoas e Organizações Sustentáveis — um convite para você experimentar, antes de tudo, o tipo de reflexão que vai encontrar ao longo do curso.</p>
+        </div>
+    </div>
+
+    <div class="video-wrap">
+        <div id="yt-player"></div>
+    </div>
+
+    <div class="content-narrow">
+    <div class="consultant-card">
+        <div class="c-identity">
+            <div class="c-avatar">
+                <img src="jhonata-crop.jpg" alt="Johnatan Dias">
+            </div>
+            <div class="c-meta">
+                <span class="c-name">Johnatan Dias</span>
+                <span class="c-role">Consultor Educacional — Fundace/USP</span>
+            </div>
+        </div>
+
+        <p class="c-phrase">Tenho condições especiais separadas pra você. Me chama e te conto os detalhes.</p>
+
+        <a href="https://wa.me/5516997495408?text=Ol%C3%A1%20Johnatan!%20Assisti%20%C3%A0%20palestra%20O%20RH%20do%20Futuro%20e%20quero%20saber%20mais%20sobre%20as%20condi%C3%A7%C3%B5es%20especiais%20do%20MBA." target="_blank" class="c-cta">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Falar com o Johnatan
+        </a>
+    </div>
+    </div>
+
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+    // ── UTMs da URL ────────────────────────────────────────────────────────
+    (function () {
+        const params = new URLSearchParams(window.location.search);
+        window._trackMeta = {
+            utm_source:   params.get('utm_source')   || null,
+            utm_medium:   params.get('utm_medium')   || null,
+            utm_campaign: params.get('utm_campaign') || null,
+            lead_email:   null,  // preenchido após o popup
+        };
+    })();
+
+    // ── Supabase config ────────────────────────────────────────────────────
+    const SB_URL   = 'https://hasptpxcyavfdzxtwpws.supabase.co';
+    const SB_ANON  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhhc3B0cHhjeWF2ZmR6eHR3cHdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMDA2MTYsImV4cCI6MjA5MTY3NjYxNn0.5TTFlqGtVl9AqWDzPTylquWRB1QdP1YXxPQRGfu5B68';
+    const SB_TABLE = 'Base GEPOS';
+
+    // ── Dispatcher de eventos ──────────────────────────────────────────────
+    function trackVideoEvent(eventName, percentWatched) {
+        const payload = {
+            event:           eventName,
+            percent_watched: percentWatched,
+            video_id:        VIDEO_ID,
+            page:            window.location.pathname,
+        };
+        Object.assign(payload, window._trackMeta);
+        console.log('[VideoTracking]', payload);
+        fetch(SB_URL + '/rest/v1/' + encodeURIComponent(SB_TABLE), {
+            method:  'POST',
+            headers: {
+                apikey:         SB_ANON,
+                Authorization:  'Bearer ' + SB_ANON,
+                'Content-Type': 'application/json',
+                Prefer:         'return=minimal',
+            },
+            body: JSON.stringify(payload),
+        }).catch(function (err) { console.warn('[VideoTracking] Supabase error:', err); });
+    }
+
+    // ── Gate (popup de e-mail) ─────────────────────────────────────────────
+    var gateOverlay = document.getElementById('gateOverlay');
+    var gateEmail   = document.getElementById('gateEmail');
+    var gateBtn     = document.getElementById('gateBtn');
+    var gateError   = document.getElementById('gateError');
+
+    function isValidEmail(v) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+    }
+
+    function unlockPage(email) {
+        // Registra o e-mail nos metadados de rastreamento
+        window._trackMeta.lead_email = email;
+
+        // Salva o evento de captura no Supabase
+        trackVideoEvent('popup_email_submit', 0);
+
+        // Fecha o overlay com transição
+        gateOverlay.classList.add('hidden');
+        setTimeout(function () { gateOverlay.style.display = 'none'; }, 400);
+    }
+
+    gateBtn.addEventListener('click', function () {
+        var email = gateEmail.value.trim();
+        if (!isValidEmail(email)) {
+            gateEmail.classList.add('error');
+            gateError.classList.add('visible');
+            gateEmail.focus();
+            return;
+        }
+        gateEmail.classList.remove('error');
+        gateError.classList.remove('visible');
+        gateBtn.disabled = true;
+        gateBtn.textContent = 'Liberando...';
+        unlockPage(email);
+    });
+
+    gateEmail.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') gateBtn.click();
+    });
+
+    gateEmail.addEventListener('input', function () {
+        gateEmail.classList.remove('error');
+        gateError.classList.remove('visible');
+    });
+
+    // Foca o campo de e-mail ao abrir
+    window.addEventListener('load', function () { gateEmail.focus(); });
+
+    // ── Player YouTube IFrame API ──────────────────────────────────────────
+    var VIDEO_ID   = 'nPfe2I703Ac';
+    var MILESTONES = [25, 50, 75];
+
+    var player, pollInterval;
+    var started = false;
+    var fired   = new Set();
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('yt-player', {
+            videoId:    VIDEO_ID,
+            playerVars: { rel: 0, modestbranding: 1, color: 'white' },
+            events: { onStateChange: onPlayerStateChange },
+        });
+    }
+
+    function getPct() {
+        if (!player || typeof player.getDuration !== 'function') return 0;
+        var dur = player.getDuration();
+        return dur ? Math.round((player.getCurrentTime() / dur) * 100) : 0;
+    }
+
+    function startPolling() {
+        if (pollInterval) return;
+        pollInterval = setInterval(function () {
+            var pct = getPct();
+            MILESTONES.forEach(function (m) {
+                var key = 'video_progress_' + m;
+                if (pct >= m && !fired.has(key)) {
+                    fired.add(key);
+                    trackVideoEvent(key, pct);
+                }
+            });
+            if (pct >= 95 && !fired.has('video_complete')) {
+                fired.add('video_complete');
+                trackVideoEvent('video_complete', pct);
+                stopPolling();
+            }
+        }, 1000);
+    }
+
+    function stopPolling() {
+        clearInterval(pollInterval);
+        pollInterval = null;
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+            if (!started) {
+                started = true;
+                trackVideoEvent('video_start', 0);
+            }
+            startPolling();
+        } else if (event.data === YT.PlayerState.PAUSED) {
+            stopPolling();
+            if (!fired.has('video_complete')) trackVideoEvent('video_paused', getPct());
+        } else if (event.data === YT.PlayerState.ENDED) {
+            stopPolling();
+            if (!fired.has('video_complete')) {
+                fired.add('video_complete');
+                trackVideoEvent('video_complete', 100);
+            }
+        }
+    }
+
+    // ── Rastreamento do clique no botão WhatsApp ───────────────────────────
+    document.querySelector('.c-cta').addEventListener('click', function () {
+        trackVideoEvent('whatsapp_click', getPct());
+    });
+</script>
+</body>
+</html>
