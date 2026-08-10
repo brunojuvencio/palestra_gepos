@@ -4,7 +4,8 @@
   "rewrites": [
     { "source": "/obrigado", "destination": "/obrigado.html" },
     { "source": "/obrigado-rh-futuro", "destination": "/obrigado-rh-futuro.html" },
-    { "source": "/obrigado-rh-futuro-b", "destination": "/obrigado-rh-futuro-b.html" }
+    { "source": "/obrigado-rh-futuro-b", "destination": "/obrigado-rh-futuro-b.html" },
+    { "source": "/obrigado-gestao-comercial", "destination": "/obrigado-gestao-comercial.html" }
   ],
   "headers": [
     {
