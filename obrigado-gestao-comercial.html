@@ -325,8 +325,160 @@
         }
         .c-cta svg { flex-shrink: 0; }
 
+        /* ─── GATE OVERLAY ─── */
+        .gate-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(13, 13, 13, 0.72);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            transition: opacity 0.4s ease;
+        }
+
+        .gate-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .gate-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px 36px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.12);
+            animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+            text-align: center;
+        }
+
+        .gate-logo {
+            height: 32px;
+            width: auto;
+            display: block;
+            margin: 0 auto 28px;
+        }
+
+        .gate-eyebrow {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-bottom: 10px;
+        }
+
+        .gate-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: clamp(26px, 5vw, 34px);
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .gate-title-accent {
+            background: linear-gradient(90deg, var(--yellow), var(--yellow-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gate-sub {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 14px;
+            color: var(--ink-mid);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        .gate-divider {
+            width: 40px;
+            height: 3px;
+            background: var(--yellow);
+            border-radius: 2px;
+            margin: 0 auto 24px;
+        }
+
+        .gate-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink-mid);
+            margin-bottom: 10px;
+            display: block;
+            text-align: left;
+        }
+
+        .gate-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 15px;
+            color: var(--ink);
+            background: var(--paper);
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 14px;
+        }
+
+        .gate-input:focus { border-color: var(--yellow); background: var(--white); }
+        .gate-input.error { border-color: #e53e3e; }
+
+        .gate-error {
+            font-size: 12px;
+            color: #e53e3e;
+            margin-top: -10px;
+            margin-bottom: 12px;
+            text-align: left;
+            display: none;
+        }
+
+        .gate-error.visible { display: block; }
+
+        .gate-btn {
+            width: 100%;
+            padding: 15px 24px;
+            background: var(--yellow);
+            color: var(--ink);
+            border: none;
+            border-radius: 10px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.18s ease, transform 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .gate-btn:hover { background: var(--yellow-dark); }
+        .gate-btn:active { transform: scale(0.98); }
+        .gate-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .gate-privacy {
+            font-size: 11px;
+            color: var(--ink-light);
+            margin-top: 14px;
+            line-height: 1.5;
+        }
+
         /* ─── RESPONSIVE ─── */
         @media (max-width: 700px) {
+            .gate-card { padding: 32px 24px; }
             .header { padding: 16px 20px; }
             .header img { height: 32px; }
             .page { padding: 28px 16px 64px; }
@@ -346,6 +498,34 @@
     </style>
 </head>
 <body>
+
+<!-- ─── GATE: popup de captura de e-mail ─── -->
+<div class="gate-overlay" id="gateOverlay">
+    <div class="gate-card">
+        <img src="Logo Fundace-USP-FEARP-PRETO.png" alt="Fundace USP FEARP" class="gate-logo">
+        <p class="gate-eyebrow">Pré-MBA gratuito</p>
+        <h2 class="gate-title">MBA <span class="gate-title-accent">Gestão Comercial</span></h2>
+        <p class="gate-sub">Acesse as aulas gratuitamente</p>
+        <div class="gate-divider"></div>
+        <label class="gate-label" for="gateEmail">Informe seu e-mail para assistir</label>
+        <input
+            type="email"
+            id="gateEmail"
+            class="gate-input"
+            placeholder="seu@email.com"
+            autocomplete="email"
+            inputmode="email"
+        >
+        <p class="gate-error" id="gateError">Por favor, insira um e-mail válido.</p>
+        <button class="gate-btn" id="gateBtn" type="button">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Assistir às aulas
+        </button>
+        <p class="gate-privacy">Seus dados são protegidos e não serão compartilhados.</p>
+    </div>
+</div>
 
 <header class="header">
     <img src="Logo Fundace-USP-FEARP-PRETO.png" alt="Fundace USP FEARP">
@@ -444,7 +624,7 @@
             utm_source:   params.get('utm_source')   || null,
             utm_medium:   params.get('utm_medium')   || null,
             utm_campaign: params.get('utm_campaign') || null,
-            lead_email:   params.get('email')        || null,
+            lead_email:   null,  // preenchido após o popup
         };
     })();
 
@@ -536,6 +716,49 @@
             }
         }
     }
+
+    // ── Gate (popup de e-mail) ─────────────────────────────────────────────
+    var gateOverlay = document.getElementById('gateOverlay');
+    var gateEmail   = document.getElementById('gateEmail');
+    var gateBtn     = document.getElementById('gateBtn');
+    var gateError   = document.getElementById('gateError');
+
+    function isValidEmail(v) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+    }
+
+    function unlockPage(email) {
+        window._trackMeta.lead_email = email;
+        trackVideoEvent('popup_email_submit', 0);
+        gateOverlay.classList.add('hidden');
+        setTimeout(function () { gateOverlay.style.display = 'none'; }, 400);
+    }
+
+    gateBtn.addEventListener('click', function () {
+        var email = gateEmail.value.trim();
+        if (!isValidEmail(email)) {
+            gateEmail.classList.add('error');
+            gateError.classList.add('visible');
+            gateEmail.focus();
+            return;
+        }
+        gateEmail.classList.remove('error');
+        gateError.classList.remove('visible');
+        gateBtn.disabled = true;
+        gateBtn.textContent = 'Liberando...';
+        unlockPage(email);
+    });
+
+    gateEmail.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') gateBtn.click();
+    });
+
+    gateEmail.addEventListener('input', function () {
+        gateEmail.classList.remove('error');
+        gateError.classList.remove('visible');
+    });
+
+    window.addEventListener('load', function () { gateEmail.focus(); });
 
     // ── Seletor de aulas ───────────────────────────────────────────────────
     var tabs        = document.querySelectorAll('.lesson-tab');
