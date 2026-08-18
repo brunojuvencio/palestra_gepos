@@ -328,6 +328,14 @@
             utm_campaign: params.get('utm_campaign') || null,
             lead_email:   params.get('email')        || null,
         };
+        // Busca o telefone no Ploomes em segundo plano e preenche no Supabase
+        if (window._trackMeta.lead_email) {
+            fetch('/api/sync-phone', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ email: window._trackMeta.lead_email }),
+            }).catch(function () {});
+        }
     })();
 
     // ── Supabase config ────────────────────────────────────────────────────

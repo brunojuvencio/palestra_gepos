@@ -554,6 +554,13 @@
         // Salva o evento de captura no Supabase
         trackVideoEvent('popup_email_submit', 0);
 
+        // Busca o telefone no Ploomes em segundo plano e preenche no Supabase
+        fetch('/api/sync-phone', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ email: email }),
+        }).catch(function () {});
+
         // Fecha o overlay com transição
         gateOverlay.classList.add('hidden');
         setTimeout(function () { gateOverlay.style.display = 'none'; }, 400);
