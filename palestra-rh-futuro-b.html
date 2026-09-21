@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pessoas no Centro das Decisões | Palestra Presencial Gratuita — FEA-RP/USP</title>
+    <title>Pessoas no Centro das Decisões: Como Transformar a Estratégia de RH em Impacto Real no Negócio | FEA-RP/USP</title>
     <link rel="icon" type="image/png" href="F-FUNDACE-LOGO-preto.png">
     <!-- Meta Pixel -->
     <script>
@@ -877,9 +877,10 @@
         }
 
         .speaker-layout {
-            display: flex;
-            flex-direction: column;
-            gap: 48px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 64px;
         }
 
         .speaker-visual {
@@ -887,69 +888,35 @@
             flex-direction: column;
             align-items: center;
             gap: 24px;
+            width: 100%;
         }
 
-        /* Elaborate monogram container */
+        @media (max-width: 768px) {
+            .speaker-layout { grid-template-columns: 1fr; gap: 40px; }
+        }
+
+        /* Rectangular photo frame */
         .monogram-container {
             position: relative;
-            width: 220px;
-            height: 220px;
+            width: 100%;
+            max-width: 360px;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
         }
 
-        .monogram-ring-outer {
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            border: 2px solid rgba(245,184,0,0.2);
-            animation: rotateSlow 20s linear infinite;
-        }
-
-        .monogram-ring-outer::before {
-            content: '';
-            position: absolute;
-            top: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--yellow);
-            box-shadow: 0 0 12px rgba(245,184,0,0.6);
-        }
-
-        .monogram-ring-mid {
-            position: absolute;
-            inset: 16px;
-            border-radius: 50%;
-            border: 1.5px dashed rgba(245,184,0,0.3);
-            animation: rotateSlowReverse 14s linear infinite;
-        }
-
-        .monogram-ring-mid::before, .monogram-ring-mid::after {
-            content: '';
-            position: absolute;
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--yellow-dark);
-        }
-
-        .monogram-ring-mid::before { top: -3.5px; left: 50%; transform: translateX(-50%); }
-        .monogram-ring-mid::after  { bottom: -3.5px; left: 50%; transform: translateX(-50%); }
+        .monogram-ring-outer, .monogram-ring-mid { display: none; }
 
         .monogram-circle {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            height: auto;
+            border-radius: var(--radius-card);
             background: var(--paper);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 12px 48px rgba(0,0,0,0.25), 0 0 0 3px var(--white), 0 0 0 4px rgba(245,184,0,0.4);
+            box-shadow: var(--shadow-heavy), 0 0 0 3px var(--white), 0 0 0 4px rgba(245,184,0,0.4);
             position: relative;
             z-index: 1;
             overflow: hidden;
@@ -960,8 +927,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center top;
-            border-radius: 50%;
+            object-position: center center;
             display: block;
         }
 
@@ -986,8 +952,8 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
-        .mcb-1 { top: 16%; right: -10%; }
-        .mcb-2 { bottom: 20%; left: -12%; }
+        .mcb-1 { top: 16px; right: -10px; }
+        .mcb-2 { bottom: 16px; left: -10px; }
 
         .speaker-credentials {
             display: flex;
@@ -1018,7 +984,7 @@
 
         .credential-pill svg { color: var(--yellow-dark); flex-shrink: 0; }
 
-        .speaker-content {}
+        .speaker-content { flex: 1; }
 
         .speaker-name-large {
             font-family: 'Barlow Condensed', sans-serif;
@@ -1146,9 +1112,10 @@
 
         .audience-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 14px;
-            margin-top: 52px;
+            margin: 52px auto 0;
+            max-width: 900px;
         }
 
         .audience-card {
@@ -1923,8 +1890,7 @@
             .success-event-strip { flex-direction: column; }
             .success-event-item + .success-event-item { border-left: none; border-top: 1px solid rgba(245,184,0,0.35); }
             .site-footer { flex-direction: column; align-items: flex-start; padding: 24px; }
-            .monogram-container { width: 180px; height: 180px; }
-            .monogram-circle { width: 130px; height: 130px; }
+            .monogram-container { max-width: 260px; }
         }
     </style>
 </head>
@@ -1957,10 +1923,9 @@
 
 
             <h1 class="hero-headline">
-                <span class="headline-kicker">Pessoas no centro das decisões</span>
-                <span class="headline-primary">Impacto real no <span class="headline-accent">negócio</span></span>
+                <span class="headline-primary">Pessoas no centro das <span class="headline-accent">decisões</span></span>
                 <span class="headline-rule"></span>
-                <span class="headline-secondary">Como conectar pessoas, indicadores e estratégia para construir políticas de RH mais efetivas e alinhadas aos objetivos da organização.</span>
+                <span class="headline-secondary">como transformar a estratégia de RH em impacto real no negócio</span>
                 <span class="hero-event-by">Evento realizado pelo MBA USP Gestão Estratégica de Pessoas e Organizações Sustentáveis</span>
             </h1>
 
@@ -2042,17 +2007,7 @@
 
         <div class="speaker-layout">
 
-            <div class="speaker-content reveal">
-                <div class="section-label">Sobre a palestrante</div>
-                <h2 class="speaker-name-large">Tatiana<br>Fabrini</h2>
-                <p class="speaker-title-role">Executiva de RH · Citrosuco</p>
-                <div class="speaker-divider"></div>
-                <p class="speaker-bio-text">
-                    <strong>Executiva de Recursos Humanos na Citrosuco</strong>, com experiência em gestão estratégica de pessoas e HR Business Partner. Atua conectando pessoas, liderança e estratégia para apoiar decisões e gerar impacto no negócio.
-                </p>
-            </div>
-
-            <div class="speaker-visual reveal reveal-delay-1">
+            <div class="speaker-visual reveal">
                 <div class="monogram-container">
                     <div class="monogram-ring-outer"></div>
                     <div class="monogram-ring-mid"></div>
@@ -2062,20 +2017,16 @@
                         <span class="mcb mcb-2">HRBP</span>
                     </div>
                 </div>
-                <div class="speaker-credentials">
-                    <div class="credential-pill">
-                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 12v5c3 3 9 3 12 0v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        Executiva de RH na Citrosuco
-                    </div>
-                    <div class="credential-pill">
-                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                        HR Business Partner
-                    </div>
-                    <div class="credential-pill">
-                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        Gestão estratégica de pessoas
-                    </div>
-                </div>
+            </div>
+
+            <div class="speaker-content reveal reveal-delay-1">
+                <div class="section-label">Sobre a palestrante</div>
+                <h2 class="speaker-name-large">Tatiana<br>Fabrini</h2>
+                <p class="speaker-title-role">Executiva de RH · Citrosuco</p>
+                <div class="speaker-divider"></div>
+                <p class="speaker-bio-text">
+                    <strong>Executiva de Recursos Humanos na Citrosuco</strong>, com experiência em gestão estratégica de pessoas e HR Business Partner. Atua conectando pessoas, liderança e estratégia para apoiar decisões e gerar impacto no negócio.
+                </p>
             </div>
 
         </div>
