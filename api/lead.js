@@ -5,6 +5,10 @@ const AC_LIST   = process.env.ACTIVE_CAMPAIGN_LIST_ID;
 const AC_TAG    = process.env.ACTIVE_CAMPAIGN_TAG_NAME;
 const AC_TAGDSC = process.env.ACTIVE_CAMPAIGN_TAG_DESCRIPTION || '';
 
+const AC_LIST_B   = process.env.ACTIVE_CAMPAIGN_LIST_ID_B;
+const AC_TAG_B    = process.env.ACTIVE_CAMPAIGN_TAG_NAME_B;
+const AC_TAGDSC_B = process.env.ACTIVE_CAMPAIGN_TAG_DESCRIPTION_B || '';
+
 /* ── Ploomes ── */
 const PL_KEY      = process.env.PLOOMES_USER_KEY;
 const PL_PIPELINE = process.env.PLOOMES_PIPELINE_ID;
@@ -50,22 +54,22 @@ async function acSyncContact({ email, firstName, lastName, phone, empresa, cargo
   return data.contact.id;
 }
 
-async function acAddToList(contactId) {
+async function acAddToList(contactId, listId) {
   await acFetch('/contactLists', {
     method: 'POST',
     body: JSON.stringify({
-      contactList: { list: AC_LIST, contact: contactId, status: 1 },
+      contactList: { list: listId, contact: contactId, status: 1 },
     }),
   });
 }
 
-async function acResolveTag() {
-  const data = await acFetch(`/tags?search=${encodeURIComponent(AC_TAG)}`);
-  const existing = data.tags?.find((t) => t.tag === AC_TAG);
+async function acResolveTag(tagName, tagDescription) {
+  const data = await acFetch(`/tags?search=${encodeURIComponent(tagName)}`);
+  const existing = data.tags?.find((t) => t.tag === tagName);
   if (existing) return existing.id;
   const created = await acFetch('/tags', {
     method: 'POST',
-    body: JSON.stringify({ tag: { tag: AC_TAG, tagType: 'contact', description: AC_TAGDSC } }),
+    body: JSON.stringify({ tag: { tag: tagName, tagType: 'contact', description: tagDescription } }),
   });
   return created.tag.id;
 }
@@ -184,7 +188,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST')    return res.status(405).json({ error: 'Method not allowed' });
 
-  const { name, email, telefone, empresa, cargo, cidade, graduacao, mba,
+  const { name, email, telefone, empresa, cargo, cidade, graduacao, mba, variant,
           utm_source, utm_medium, utm_campaign, utm_term, utm_content } = req.body || {};
 
   if (!name || !email) {
@@ -193,6 +197,11 @@ export default async function handler(req, res) {
 
   const [firstName, ...rest] = name.trim().split(' ');
   const lastName = rest.join(' ');
+
+  const isVariantB   = variant === 'b';
+  const listId       = isVariantB ? AC_LIST_B   : AC_LIST;
+  const tagName      = isVariantB ? AC_TAG_B    : AC_TAG;
+  const tagDescription = isVariantB ? AC_TAGDSC_B : AC_TAGDSC;
 
   // Supabase — todos os leads (não bloqueia o fluxo se falhar)
   try {
@@ -205,7 +214,7 @@ export default async function handler(req, res) {
   // ActiveCampaign — todos os leads
   try {
     const contactId = await acSyncContact({ email, firstName, lastName, phone: telefone, empresa, cargo });
-    const [tagId]   = await Promise.all([acResolveTag(), acAddToList(contactId)]);
+    const [tagId]   = await Promise.all([acResolveTag(tagName, tagDescription), acAddToList(contactId, listId)]);
     await acAddTag(contactId, tagId);
   } catch (err) {
     console.error('[lead] ActiveCampaign error:', err.message);

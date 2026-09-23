@@ -1852,6 +1852,21 @@
 
         .success-cta:hover { background: var(--yellow-dark); gap: 14px; transform: translateY(-1px); }
 
+        .whatsapp-card { border-top-color: #25D366; }
+        .whatsapp-icon { background: #25D366; box-shadow: 0 8px 32px rgba(37,211,102,0.5); }
+        .whatsapp-cta { background: #25D366; color: var(--white); box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+        .whatsapp-cta:hover { background: #1DA851; }
+
+        .whatsapp-skip {
+            display: block;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--ink-light);
+            text-decoration: none;
+        }
+
+        .whatsapp-skip:hover { color: var(--ink-mid); text-decoration: underline; }
+
         /* ─── RESPONSIVE ─── */
         @media (max-width: 1024px) {
             .hero-inner { padding-top: 56px; padding-bottom: 56px; min-height: auto; }
@@ -2240,7 +2255,7 @@
 
 <!-- ── SUCCESS OVERLAY ── -->
 <div class="success-overlay" id="successOverlay">
-    <div class="success-card">
+    <div class="success-card" id="successCard">
         <div class="success-icon">
             <svg width="32" height="32" fill="none" viewBox="0 0 24 24">
                 <path d="M5 13l4 4L19 7" stroke="#0D0D0D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -2264,12 +2279,32 @@
         <p class="success-text" id="successText">
             Enviamos os detalhes para o seu e-mail.
         </p>
-        <a href="#" onclick="document.getElementById('successOverlay').classList.remove('active'); return false;" class="success-cta">
+        <a href="#" onclick="showWhatsappStep(); return false;" class="success-cta">
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
                 <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             Entendido
         </a>
+    </div>
+
+    <div class="success-card whatsapp-card" id="whatsappCard" style="display:none;">
+        <div class="success-icon whatsapp-icon">
+            <svg width="32" height="32" fill="none" viewBox="0 0 24 24">
+                <path d="M17.6 6.32A8.86 8.86 0 0 0 3.06 16.83L2 21l4.3-1.03a8.86 8.86 0 0 0 12.9-7.83c0-2.36-.94-4.6-2.6-6.26z" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8.4 8.7c.16-.36.4-.36.62-.37h.5c.16 0 .38-.06.6.46.22.53.75 1.83.82 1.96.07.14.11.3.02.48-.09.18-.14.29-.27.44-.14.16-.29.35-.41.47-.14.14-.28.29-.12.56.16.28.72 1.18 1.54 1.92 1.06.94 1.95 1.24 2.23 1.38.28.14.44.12.6-.07.16-.2.68-.79.86-1.06.18-.28.36-.23.6-.14.25.09 1.58.75 1.85.88.28.14.46.2.53.32.07.12.07.68-.16 1.34-.23.66-1.36 1.26-1.9 1.34-.48.07-1.1.1-1.77-.11-.4-.13-.93-.3-1.6-.6-2.8-1.21-4.63-4.03-4.77-4.22-.14-.19-1.14-1.52-1.14-2.9 0-1.38.72-2.05.98-2.33z" fill="#0D0D0D"/>
+            </svg>
+        </div>
+        <h2 class="success-title">Entre no grupo<br>do WhatsApp</h2>
+        <p class="success-text">
+            Receba lembretes, materiais e novidades sobre a palestra direto no seu WhatsApp.
+        </p>
+        <a href="https://chat.whatsapp.com/DFas8BMquyR1NpUvddyXd8" target="_blank" rel="noopener" class="success-cta whatsapp-cta">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+                <path d="M17.6 6.32A8.86 8.86 0 0 0 3.06 16.83L2 21l4.3-1.03a8.86 8.86 0 0 0 12.9-7.83c0-2.36-.94-4.6-2.6-6.26z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Entrar no grupo
+        </a>
+        <a href="#" onclick="closeSuccessOverlay(); return false;" class="whatsapp-skip">Agora não</a>
     </div>
 </div>
 
@@ -2334,6 +2369,7 @@
                     cidade:  form.querySelector('[name="cidade"]').value.trim(),
                     graduacao,
                     mba: mba.value,
+                    variant: 'b',
                     ..._utmParams,
                 }),
             });
@@ -2364,8 +2400,19 @@
         emailStrong.textContent = email;
         text.append('Enviamos os detalhes para ', emailStrong, '.');
 
+        document.getElementById('successCard').style.display = 'block';
+        document.getElementById('whatsappCard').style.display = 'none';
         document.getElementById('successOverlay').classList.add('active');
     });
+
+    function showWhatsappStep() {
+        document.getElementById('successCard').style.display = 'none';
+        document.getElementById('whatsappCard').style.display = 'block';
+    }
+
+    function closeSuccessOverlay() {
+        document.getElementById('successOverlay').classList.remove('active');
+    }
 </script>
 
 </body>
